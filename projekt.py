@@ -22,7 +22,7 @@ canvas = tkinter.Canvas(window, bg = "black", width = WINDOW_WIDTH, height = WIN
 canvas.pack()
 window.update()
 
-#center the window
+#wyśrodkowuje okno
 window_width = window.winfo_width()
 window_height = window.winfo_height()
 screen_width = window.winfo_screenwidth()
@@ -34,23 +34,23 @@ window_y = int((screen_height/2) - (window_height/2))
 #format "(w)x(h)+(x)+(y)"
 window.geometry(f"{window_width}x{window_height}+{window_x}+{window_y}")
 
-#initialize game
-snake = Tile(TILE_SIZE * 5, TILE_SIZE * 5) #single tile, snake's head
+#inicjalizaacja gry
+snake = Tile(TILE_SIZE * 5, TILE_SIZE * 5)
 food = Tile(TILE_SIZE * 10, TILE_SIZE * 10)
 velocityX = 0
 velocityY = 0
-snake_body = [] #multiple snake tiles
+snake_body = []
 game_over = False
 score = 0
 
-#game loop
+#pętla gry
 def change_direction(e): #e = event
     # print(e)
     # print(e.keysym)
 
     global velocityX, velocityY, game_over
     if (game_over):
-        return #edit this code to reset game variables to play again
+        return
 
     if (e.keysym == "Up" and velocityY != 1):
         velocityX = 0
@@ -83,14 +83,14 @@ def move():
             game_over = True
             return
     
-    #collision
+    #kolizja
     if (snake.x == food.x and snake.y == food.y): 
         snake_body.append(Tile(food.x, food.y))
         food.x = random.randint(0, COLS-1) * TILE_SIZE
         food.y = random.randint(0, ROWS-1) * TILE_SIZE
         score += 1
 
-    #update snake body
+
     for i in range(len(snake_body)-1, -1, -1):
         tile = snake_body[i]
         if (i == 0):
@@ -111,10 +111,10 @@ def draw():
 
     canvas.delete("all")
 
-    #draw food
+    #rysuje jedzenie
     canvas.create_rectangle(food.x, food.y, food.x + TILE_SIZE, food.y + TILE_SIZE, fill = 'red')
 
-    #draw snake
+    #rysuje węża
     canvas.create_rectangle(snake.x, snake.y, snake.x + TILE_SIZE, snake.y + TILE_SIZE, fill = 'lime green')
 
     for tile in snake_body:
@@ -125,8 +125,8 @@ def draw():
     else:
         canvas.create_text(30, 20, font = "Arial 10", text = f"Score: {score}", fill = "white")
     
-    window.after(100, draw) #call draw again every 100ms (1/10 of a second) = 10 frames per second
+    window.after(100, draw) #wywołuje i znowu pisz co 100ms (1/10 of a second) = 10 klatrek an sekundę
 
 draw()
-window.bind("<KeyRelease>", change_direction) #when you press on any key and then let go
+`window.bind("<KeyRelease>", change_direction)` #when you press on any key and then let go
 window.mainloop() #used for listening to window events like key presses
